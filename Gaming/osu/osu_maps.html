@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>My osu! Maps</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+  <a href="../osu/osu.html">Back</a>
+  <a href="../../index.html">Main Menu</a>
+  <table id="mapTable" class="lined-table">
+    <thead>
+      <tr>
+        <th>Map Name</th>
+        <th>Artist</th>
+        <th>Type</th>
+        <th>Date Uploaded</th>
+        <th>Difficulty (Star Rating)</th>
+        <th>BPM</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody id="mapTableBody">
+      <!-- Rows for your osu maps will be dynamically added here -->
+    </tbody>
+  </table>
+
+  <script>
+    // Ascending sort first
+    const sortOrder = {};
+
+    function sortTable(col) {
+      const tbl = document.getElementById("mapTable");
+      const rows = Array.from(tbl.querySelector("tbody").querySelectorAll("tr"));
+
+      const sortedRows = rows.sort((a, b) => {
+        const aText = a.children[col].textContent;
+        const bText = b.children[col].textContent;
+
+        if (col === 3 || col === 4 || col === 5) { // For date, difficulty and BPM columns, convert string to number
+          return sortOrder[col] ? aText - bText : bText - aText;
+        } else {
+          return sortOrder[col] ? aText.localeCompare(bText) : bText.localeCompare(aText);
+        }
+      });
+
+      sortOrder[col] = !sortOrder[col];
+      tbl.querySelector("tbody").append(...sortedRows);
+    }
+
+    document.querySelectorAll("#mapTable th").forEach((th, i) => {
+      th.addEventListener('click', () => sortTable(i));
+    });
+  </script>
+
+  <script src="../../../script.js"></script>
+</body>
+</html>
